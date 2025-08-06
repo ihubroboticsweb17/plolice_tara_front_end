@@ -1,0 +1,5 @@
+class LoginService {
+  static login(){
+    //
+  }
+}
