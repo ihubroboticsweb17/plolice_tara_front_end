@@ -5,7 +5,8 @@ import 'package:edu_tara/core/api/api_service.dart';
 import 'package:edu_tara/core/utils/helper_function.dart';
 import 'package:edu_tara/core/widgets/company_logo.dart';
 import 'package:edu_tara/core/widgets/glassmorphism.dart';
-import 'package:edu_tara/features/complaint_screen/view/complaint_add_edit.dart';
+import 'package:edu_tara/features/complaint_screen/service/comlaint_service.dart';
+import 'package:edu_tara/features/complaint_screen/view/complaints_list.dart';
 import 'package:edu_tara/features/language/view/language_screen.dart';
 import 'package:edu_tara/features/welcome/controller/battery_controller.dart';
 import 'package:edu_tara/features/welcome/controller/volume_controller.dart';
@@ -24,12 +25,13 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   Timer? oneSecTimer;
+  bool isSpeak = false;
 
   @override
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       ApiService.fetchAndUpdateBaseUrl();
       Provider.of<BatteryProvider>(
         context,
@@ -37,6 +39,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       ).fetchOnlineBattery(userID);
 
       Provider.of<VolumeController>(context, listen: false).fetchVolume(roboId);
+
+      var response = await ComplaintService.getSpeakingStatus();
+      if (response['status'] == "success") {
+        isSpeak = response['data']['is_speaking'];
+        setState(() {});
+      }
     });
 
     oneSecTimer = Timer.periodic(const Duration(seconds: 5), (_) async {
@@ -222,6 +230,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               child: Row(
                 children: [
                   Expanded(
+                    flex: 2,
                     child: _menuButton(
                       icon: "assets/Volume.svg",
                       label: "Volume",
@@ -236,6 +245,35 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           });
                         }
                       },
+                    ),
+                  ),
+                  SizedBox(width: 20),
+
+                  Expanded(
+                    child: InkWell(
+                      onTap: () async {
+                        var response = await ComplaintService.setSpeakingStatus(
+                          !isSpeak,
+                        );
+
+                        if (response['status'] == "success") {
+                          setState(() {
+                            isSpeak = response['data']['is_speaking'];
+                          });
+                        }
+                      },
+                      child: ChildGlasmorphism(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              isSpeak ? Icons.mic : Icons.mic_off,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -342,7 +380,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         toggleColor: Colors.white,
         icon: const Icon(Icons.arrow_forward, color: Colors.black),
         child: Text(
-          'Complaint Register',
+          'View Complaints',
           style: GoogleFonts.poppins(
             fontSize: 18,
             fontWeight: FontWeight.w600,
@@ -352,7 +390,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         action: (controller) async {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ComplaintAddEditView()),
+            MaterialPageRoute(builder: (context) => ComplaintsList()),
           );
         },
       ),

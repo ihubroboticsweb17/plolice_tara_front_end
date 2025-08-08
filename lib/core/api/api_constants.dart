@@ -36,6 +36,9 @@ class ApiConstants {
   // complaint
   static String createComplaint = "/police/complaints/create/";
   static String complaintsList = "/police/complaints/list/?user=";
+  static String getComplaintDetail = "/police/complaint/detail/";
+  static String editComplaint= "/police/complaints/edit/";
+
   static String createSpeak = "/police/speak/create/";
   static String getCurrentSpeak = "/police/speak/list/";
 }

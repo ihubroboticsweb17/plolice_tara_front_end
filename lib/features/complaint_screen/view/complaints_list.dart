@@ -89,7 +89,9 @@ class _ComplaintsListState extends State<ComplaintsList> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ComplaintAddEditView(),
+                              builder: (context) => ComplaintAddEditView(
+                                isEdit: false,
+                              ),
                             ),
                           );
                         },
@@ -216,7 +218,10 @@ class _ComplaintsListState extends State<ComplaintsList> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  ComplaintsDetailsView(complaintId: complaint.caseId??'0',),
+                                                  ComplaintsDetailsView(
+                                                    complaintId:
+                                                        complaint.caseId??'',
+                                                  ),
                                             ),
                                           );
                                         } else if (value == 'edit') {
@@ -224,12 +229,27 @@ class _ComplaintsListState extends State<ComplaintsList> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  ComplaintAddEditView(),
+                                                  ComplaintAddEditView(
+                                                    isEdit: true,
+                                                    complaintId: complaint.caseId,
+                                                    name: complaint.name,
+                                                    age: complaint.age
+                                                        .toString(),
+                                                    address: complaint.address,
+                                                    complaint:
+                                                        complaint.complaint,
+                                                    phone: complaint.phoneNo,
+                                                    email: complaint.email,
+                                                    state: complaint.state,
+                                                    district:
+                                                        complaint.district,
+                                                    pincode: complaint.pincode,
+                                                  ),
                                             ),
                                           );
                                         }
                                       },
-                                      itemBuilder: (context) => [ 
+                                      itemBuilder: (context) => [
                                         const PopupMenuItem(
                                           value: 'view',
                                           child: Row(

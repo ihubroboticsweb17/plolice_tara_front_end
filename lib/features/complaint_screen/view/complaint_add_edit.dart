@@ -1,13 +1,36 @@
 import 'package:edu_tara/core/utils/helper_function.dart';
-import 'package:edu_tara/core/widgets/glassmorphism.dart';
 import 'package:edu_tara/features/complaint_screen/controller/complaint_controller.dart';
-import 'package:edu_tara/features/complaint_screen/view/complaints_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class ComplaintAddEditView extends StatefulWidget {
-  const ComplaintAddEditView({super.key});
+  final bool isEdit;
+  final String? complaintId;
+  final String? name;
+  final String? age;
+  final String? address;
+  final String? complaint;
+  final String? phone;
+  final String? email;
+  final String? state;
+  final String? district;
+  final String? pincode;
+
+  const ComplaintAddEditView({
+    super.key,
+    required this.isEdit,
+    this.name,
+    this.age,
+    this.address,
+    this.complaint,
+    this.phone,
+    this.email,
+    this.state,
+    this.district,
+    this.pincode,
+    this.complaintId,
+  });
 
   @override
   State<ComplaintAddEditView> createState() => _ComplaintAddEditViewState();
@@ -21,10 +44,29 @@ class _ComplaintAddEditViewState extends State<ComplaintAddEditView> {
   final _complaintController = TextEditingController();
   final _phoneController = TextEditingController();
   final _emailController = TextEditingController();
-  // final _stateController = TextEditingController();
-  // final _districtController = TextEditingController();
+  final _stateController = TextEditingController();
+  final _districtController = TextEditingController();
+  final _pincodeController = TextEditingController();
 
   bool _isSubmitting = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.isEdit) {
+      _nameController.text = widget.name ?? '';
+      _ageController.text = widget.age ?? '';
+      _addressController.text = widget.address ?? '';
+      _complaintController.text = widget.complaint ?? '';
+      _phoneController.text = widget.phone ?? '';
+      _emailController.text = widget.email ?? '';
+      _stateController.text = widget.state ?? '';
+      _districtController.text = widget.district ?? '';
+      _pincodeController.text = widget.pincode ?? '';
+      setState(() {});
+    }
+  }
 
   @override
   void dispose() {
@@ -34,6 +76,9 @@ class _ComplaintAddEditViewState extends State<ComplaintAddEditView> {
     _complaintController.dispose();
     _phoneController.dispose();
     _emailController.dispose();
+    _stateController.dispose();
+    _districtController.dispose();
+    _pincodeController.dispose();
     super.dispose();
   }
 
@@ -49,16 +94,26 @@ class _ComplaintAddEditViewState extends State<ComplaintAddEditView> {
       "user": userID,
       "name": _nameController.text,
       "age": _ageController.text,
-      "state": "Kerala",
-      "district": "Ernakulam",
-      "pincode": "682001",
+      "state": _stateController.text,
+      "district": _districtController.text,
+      "pincode": _pincodeController.text,
       "address": _addressController.text,
       "phone_no": _phoneController.text,
       "email": _emailController.text,
       "complaint": _complaintController.text,
     };
 
-    final success = await controller.createComplaint(data, context);
+    bool success = false;
+
+    if (widget.isEdit && widget.complaintId != null) {
+      success = await controller.editComplaint(
+        widget.complaintId!,
+        context,
+        data,
+      );
+    } else {
+      success = await controller.createComplaint(data, context);
+    }
 
     if (!mounted) return;
 
@@ -72,6 +127,11 @@ class _ComplaintAddEditViewState extends State<ComplaintAddEditView> {
       _complaintController.clear();
       _phoneController.clear();
       _emailController.clear();
+      _stateController.clear();
+      _districtController.clear();
+      _pincodeController.clear();
+
+      Navigator.pop(context);
     }
   }
 
@@ -350,32 +410,7 @@ class _ComplaintAddEditViewState extends State<ComplaintAddEditView> {
                         ],
                       ),
                     ),
-
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ComplaintsList(),
-                          ),
-                        );
-                      },
-                      child: ChildGlasmorphism(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 8,
-                          ),
-                          child: Text(
-                            "Complaints List",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                  
                   ],
                 ),
               ),
@@ -463,6 +498,52 @@ class _ComplaintAddEditViewState extends State<ComplaintAddEditView> {
                                     },
                                   ),
                                 ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: _buildTextField(
+                                    controller: _stateController,
+                                    label: 'State',
+                                    icon: Icons.location_on_outlined,
+                                    validator: (v) =>
+                                        v!.isEmpty ? 'State is required' : null,
+                                    textCapitalization:
+                                        TextCapitalization.words,
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+
+                                Expanded(
+                                  child: _buildTextField(
+                                    controller: _districtController,
+                                    label: 'District',
+                                    icon: Icons.location_on_outlined,
+                                    validator: (v) => v!.isEmpty
+                                        ? 'District is required'
+                                        : null,
+                                    textCapitalization:
+                                        TextCapitalization.words,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: _buildTextField(
+                                    controller: _pincodeController,
+                                    label: 'Pincode',
+                                    icon: Icons.pin_drop,
+                                    validator: (v) => v!.isEmpty
+                                        ? 'Pincode is required'
+                                        : null,
+                                    textCapitalization:
+                                        TextCapitalization.words,
+                                  ),
+                                ),
+                                Expanded(child: Text('')),
                               ],
                             ),
                             _buildTextField(

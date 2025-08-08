@@ -1,4 +1,4 @@
-package com.ihub.edu_tara
+package com.ihub.police_tara
 
 import android.content.Intent
 import android.os.Bundle

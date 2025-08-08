@@ -9,17 +9,6 @@ class ComplaintController with ChangeNotifier {
   bool _isLoadingForFetch = false;
   bool get isLoadingForFetch => _isLoadingForFetch;
 
-  bool _isLoadingForCreate = false;
-  bool get isLoadingForCreate => _isLoadingForCreate;
-
-
-
-  bool _isLoadingForfetchDetails = false;
-  bool get isLoadingForfetchDetails => _isLoadingForfetchDetails;
-
-  bool _isSpeaking = false;
-  bool get isSpeaking => _isSpeaking;
-
   List<Data> _complaints = [];
   List<Data> get complaints => _complaints;
 
@@ -42,12 +31,7 @@ class ComplaintController with ChangeNotifier {
     Map<String, dynamic> data,
     BuildContext context,
   ) async {
-    _isLoadingForCreate = true;
-    notifyListeners();
     Map response = await _service.createComplaint(data);
-
-    _isLoadingForCreate = false;
-    notifyListeners();
 
     if (response['status'] == "ok") {
       Navigator.pop(context);
@@ -68,38 +52,29 @@ class ComplaintController with ChangeNotifier {
     }
   }
 
- 
+  editComplaint(
+    String id,
+    BuildContext context,
+    Map<String, dynamic> data,
+  ) async {
+    Map response = await _service.editComplaint(id, data);
 
+    if (response['status'] == "ok") {
+      Navigator.pop(context);
+      showTopRightToast(
+        context: context,
+        message: "Complaint submitted successfully",
+        color: Colors.green,
+      );
 
-
-
-
-
-
-
-
-
-
-
-
-
-  Future<bool> editComplaint(String id, Map<String, dynamic> data) async {
-    return await _service.editComplaint(id, data);
-  }
-
-  Future<void> toggleSpeaking(bool status) async {
-    final result = await _service.setSpeakingStatus(status);
-    if (result) {
-      _isSpeaking = status;
-      notifyListeners();
-    }
-  }
-
-  Future<void> loadSpeakingStatus() async {
-    final list = await _service.getSpeakingStatus();
-    if (list.isNotEmpty) {
-      _isSpeaking = list.last['is_speaking'];
-      notifyListeners();
+      return true;
+    } else {
+      showTopRightToast(
+        context: context,
+        message: response['message'] ?? "Submission failed",
+        color: Colors.red,
+      );
+      return false;
     }
   }
 }

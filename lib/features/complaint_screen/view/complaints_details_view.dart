@@ -1,7 +1,7 @@
 import 'package:edu_tara/core/utils/helper_function.dart';
 import 'package:edu_tara/features/complaint_screen/service/comlaint_service.dart';
+import 'package:edu_tara/features/complaint_screen/view/complaint_add_edit.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 
 class ComplaintsDetailsView extends StatefulWidget {
   final String complaintId;
@@ -63,6 +63,7 @@ class _ComplaintsDetailsViewState extends State<ComplaintsDetailsView> {
                       child: Column(
                         children: [
                           SizedBox(height: 50),
+
                           CircularProgressIndicator(),
                         ],
                       ),
@@ -476,7 +477,24 @@ class _ComplaintsDetailsViewState extends State<ComplaintsDetailsView> {
           ),
           child: ElevatedButton.icon(
             onPressed: () {
-              //
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ComplaintAddEditView(
+                    isEdit: true,
+                    complaintId:widget.complaintId,
+                    name: complaint?["data"]['name'] ?? '',
+                    age: complaint?['data']['age'].toString() ?? '',
+                    email: complaint?['data']['email'] ?? '',
+                    phone: complaint?['data']['phone_no'] ?? '',
+                    state: complaint?['data']['state'] ?? '',
+                    district: complaint?['data']['district'] ?? '',
+                    pincode: complaint?['data']['pincode'] ?? '',
+                    address: complaint?['data']['address'] ?? '',
+                    complaint: complaint?['data']['complaint'] ?? '',
+                  ),
+                ),
+              );
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.transparent,
