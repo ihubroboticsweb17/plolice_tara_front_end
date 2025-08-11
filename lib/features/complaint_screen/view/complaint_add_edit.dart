@@ -54,6 +54,12 @@ class _ComplaintAddEditViewState extends State<ComplaintAddEditView> {
   void initState() {
     super.initState();
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getData();
+    });
+  }
+
+  getData() {
     if (widget.isEdit) {
       _nameController.text = widget.name ?? '';
       _ageController.text = widget.age ?? '';
@@ -115,8 +121,6 @@ class _ComplaintAddEditViewState extends State<ComplaintAddEditView> {
       success = await controller.createComplaint(data, context);
     }
 
-    if (!mounted) return;
-
     setState(() => _isSubmitting = false);
 
     if (success) {
@@ -126,12 +130,10 @@ class _ComplaintAddEditViewState extends State<ComplaintAddEditView> {
       _addressController.clear();
       _complaintController.clear();
       _phoneController.clear();
-      _emailController.clear();
+      _emailController.clear();                 
       _stateController.clear();
       _districtController.clear();
       _pincodeController.clear();
-
-      Navigator.pop(context);
     }
   }
 
@@ -410,7 +412,6 @@ class _ComplaintAddEditViewState extends State<ComplaintAddEditView> {
                         ],
                       ),
                     ),
-                  
                   ],
                 ),
               ),
@@ -474,9 +475,15 @@ class _ComplaintAddEditViewState extends State<ComplaintAddEditView> {
                                     label: 'Phone Number',
                                     icon: Icons.phone_outlined,
                                     keyboardType: TextInputType.phone,
-                                    validator: (v) => v!.isEmpty
-                                        ? 'Phone number is required'
-                                        : null,
+                                    validator: (v) {
+                                      if (v == null || v.isEmpty) {
+                                        return 'Phone number is required';
+                                      }
+                                      if (!RegExp(r'^\d{10}$').hasMatch(v)) {
+                                        return 'Phone number must be exactly 10 digits';
+                                      }
+                                      return null;
+                                    },
                                   ),
                                 ),
                                 const SizedBox(width: 16),
@@ -536,9 +543,16 @@ class _ComplaintAddEditViewState extends State<ComplaintAddEditView> {
                                     controller: _pincodeController,
                                     label: 'Pincode',
                                     icon: Icons.pin_drop,
-                                    validator: (v) => v!.isEmpty
-                                        ? 'Pincode is required'
-                                        : null,
+                                    keyboardType: TextInputType.number,
+                                    validator: (v) {
+                                      if (v == null || v.isEmpty) {
+                                        return 'Pincode is required';
+                                      }
+                                      if (!RegExp(r'^\d{6}$').hasMatch(v)) {
+                                        return 'Pincode must be exactly 6 digits';
+                                      }
+                                      return null;
+                                    },
                                     textCapitalization:
                                         TextCapitalization.words,
                                   ),
@@ -571,9 +585,14 @@ class _ComplaintAddEditViewState extends State<ComplaintAddEditView> {
                               maxLines: 6,
                               maxLength: 500,
                               textCapitalization: TextCapitalization.sentences,
-                              validator: (v) => v == null || v.length < 20
-                                  ? 'Please provide at least 20 characters'
-                                  : null,
+                              validator: (v) {
+                                if (widget.isEdit) {
+                                  if (v == null || v.length < 20) {
+                                    return 'Please provide at least 20 characters';
+                                  }
+                                }
+                                return null; // no error if isEdit is false or length is >= 20
+                              },
                             ),
                           ],
                         ),

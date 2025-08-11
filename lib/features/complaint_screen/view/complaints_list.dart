@@ -19,8 +19,11 @@ class _ComplaintsListState extends State<ComplaintsList> {
   @override
   void initState() {
     super.initState();
-    controller = Provider.of<ComplaintController>(context, listen: false);
-    controller.fetchComplaints(int.parse(userID));
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller = Provider.of<ComplaintController>(context, listen: false);
+      controller.fetchComplaints(int.parse(userID));
+    });
   }
 
   @override
@@ -70,38 +73,38 @@ class _ComplaintsListState extends State<ComplaintsList> {
                         ],
                       ),
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF667eea), Color(0xFF764ba2)],
-                        ),
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF667eea).withOpacity(0.3),
-                            blurRadius: 12,
-                            offset: const Offset(0, 6),
-                          ),
-                        ],
-                      ),
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ComplaintAddEditView(
-                                isEdit: false,
-                              ),
-                            ),
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.add,
-                          color: Colors.white,
-                          size: 24,
-                        ),
-                      ),
-                    ),
+                    // Container(
+                    //   decoration: BoxDecoration(
+                    //     gradient: const LinearGradient(
+                    //       colors: [Color(0xFF667eea), Color(0xFF764ba2)],
+                    //     ),
+                    //     borderRadius: BorderRadius.circular(16),
+                    //     boxShadow: [
+                    //       BoxShadow(
+                    //         color: const Color(0xFF667eea).withOpacity(0.3),
+                    //         blurRadius: 12,
+                    //         offset: const Offset(0, 6),
+                    //       ),
+                    //     ],
+                    //   ),
+                    //   child: IconButton(
+                    //     onPressed: () {
+                    //       Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //           builder: (context) => ComplaintAddEditView(
+                    //             isEdit: false,
+                    //           ),
+                    //         ),
+                    //       );
+                    //     },
+                    //     icon: const Icon(
+                    //       Icons.add,
+                    //       color: Colors.white,
+                    //       size: 24,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -220,7 +223,7 @@ class _ComplaintsListState extends State<ComplaintsList> {
                                               builder: (context) =>
                                                   ComplaintsDetailsView(
                                                     complaintId:
-                                                        complaint.caseId??'',
+                                                        complaint.caseId ?? '',
                                                   ),
                                             ),
                                           );
@@ -231,7 +234,8 @@ class _ComplaintsListState extends State<ComplaintsList> {
                                               builder: (context) =>
                                                   ComplaintAddEditView(
                                                     isEdit: true,
-                                                    complaintId: complaint.caseId,
+                                                    complaintId:
+                                                        complaint.caseId,
                                                     name: complaint.name,
                                                     age: complaint.age
                                                         .toString(),

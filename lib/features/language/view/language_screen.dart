@@ -17,18 +17,23 @@ class _LanguageListState extends State<LanguageList> {
   void initState() {
     super.initState();
 
-    final batteryProvider = Provider.of<BatteryProvider>(
-      context,
-      listen: false,
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final batteryProvider = Provider.of<BatteryProvider>(
+        context,
+        listen: false,
+      );
 
-    final langProvider = Provider.of<LanguageProvider>(context, listen: false);
+      final langProvider = Provider.of<LanguageProvider>(
+        context,
+        listen: false,
+      );
 
-    final defaultLang =
-        batteryProvider.batteryModel?.data?[0].robot?.language ?? "";
+      final defaultLang =
+          batteryProvider.batteryModel?.data?[0].robot?.language ?? "";
 
-    langProvider.setInitialLanguage(defaultLang);
-    langProvider.fetchLanguages();
+      langProvider.setInitialLanguage(defaultLang);
+      langProvider.fetchLanguages();
+    });
   }
 
   @override

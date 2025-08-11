@@ -6,6 +6,7 @@ import 'package:edu_tara/core/utils/helper_function.dart';
 import 'package:edu_tara/core/widgets/company_logo.dart';
 import 'package:edu_tara/core/widgets/glassmorphism.dart';
 import 'package:edu_tara/features/complaint_screen/service/comlaint_service.dart';
+import 'package:edu_tara/features/complaint_screen/view/complaint_add_edit.dart';
 import 'package:edu_tara/features/complaint_screen/view/complaints_list.dart';
 import 'package:edu_tara/features/language/view/language_screen.dart';
 import 'package:edu_tara/features/welcome/controller/battery_controller.dart';
@@ -284,24 +285,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    flex: 3,
-                    child: _menuButton(
-                      icon: "assets/Home.svg",
-                      label: "Menu",
-                      onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => RealtimeText(),
-                        //   ),
-                        // );
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 20),
-
-                  Expanded(
-                    flex: 5,
+                    flex: 2,
                     child: _menuButton(
                       icon: "assets/g_translate.svg",
                       label: "Language",
@@ -310,6 +294,30 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => LanguageList(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  Expanded(
+                    flex: 3,
+                    child: _menuButton(
+                      icon: "assets/add.svg",
+                      label: "New Complaint",
+                      onPressed: () {
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => RealtimeText(),
+                        //   ),
+                        // );
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ComplaintAddEditView(isEdit: false),
                           ),
                         );
                       },
@@ -357,6 +365,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     SvgPicture.asset(
                       icon,
                       width: MediaQuery.of(context).size.width * 0.05,
+                      color: Colors.white,
                     ),
                     const SizedBox(height: 8),
                     Text(label, style: GoogleFonts.poppins(fontSize: 14)),
