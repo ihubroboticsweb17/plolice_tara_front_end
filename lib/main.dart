@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+// git remote set-url origin https://github.com/Muneef-Nk/tara_gen_1.git
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeRight,
