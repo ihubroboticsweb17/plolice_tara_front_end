@@ -25,3 +25,13 @@ Managed through `LanguageList` and the `LanguageProvider`. Displays large tap ta
 ## 4. Hardware Health Polling (`features/welcome`)
 The project manages direct connections to hardware battery services via `features/welcome/model/online_battery_model.dart` and offline variants. 
 `BatteryProvider.fetchOnlineBattery()` grabs vital metrics, adjusting the UI indicator icons across the whole application natively without manual setState triggers.
+
+## 5. Login & Authentication (`features/login`)
+A secure gateway for accessing restricted functionality via the `LoginController` and `LoginService`. Provides foundational authentication mechanisms leveraging custom user input handling components.
+- **`PasswordScreen` & `LoginView`:** Core interfaces handling credentials.
+
+## Shared UI Systems (`core/widgets`)
+To maintain the enterprise visual standard, all dynamic interfaces use shared core widgetry rather than distinct ad-hoc designs. Some highlights include:
+- **`Glassmorphism`:** Foundation of the entire UI theme ensuring immersive, frosted overlays overlaying background assets.
+- **`SideSheet` & `Toast`:** Comprehensive custom alert mechanisms designed around the landscape tablet paradigm.
+- **`CompanyLogo` & Form Controls:** Specialized UI elements supporting responsive layout.

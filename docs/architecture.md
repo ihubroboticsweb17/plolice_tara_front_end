@@ -21,12 +21,24 @@ UI elements sit atop a modern, frosted-glass effect leveraging backdrop filters.
 - **`BaseGlassmorphism`**: Reusable heavily blurred backdrop box using `BackdropFilter` with radial gradient decoration.
 - **`ChildGlasmorphism`**: Lighter implementation used for individual buttons and interactive sliders across the modules.
 
-### Component Isolation
-Every feature within the `lib/features/` folder is rigidly separated into MVC/MVC-like layers:
-- `view/`: Contains stateful and stateless widgets.
-- `controller/`: Houses the ChangeNotifiers linking logic and state.
-- `service/`: Isolated class modules tasked *only* with handling HTTP requests (via `ApiService` or directly) and serializing JSON payloads.
-- `model/`: Plain Dart Object classes mapping backend JSON responses.
+### Core Architecture (`lib/core/`)
+The foundation of the application lies in the `core/` directory, which shares essential utilities and widgets across all features to enforce DRY principles:
+- `api/`: Centralized HTTP handling through `ApiService` and a single source of truth for REST endpoints via `ApiConstants`.
+- `utils/`: Global utility helpers and functions.
+- `widgets/`: Reusable, enterprise-grade components including customized buttons, side sheets, toasts, and the integral Glassmorphism layouts (`base_glassmorphism` and `child_glassmorphism`).
+
+### Feature Modules (`lib/features/`)
+Every capability in the application is encapsulated as a standalone module within the `features/` directory. Current modules include:
+- **`welcome/`**: Dashboard viewing, volume control, battery monitoring, and robot status syncing.
+- **`complaint_screen/`**: Full CRUD operations for public complaint management.
+- **`language/`**: Multi-language localization selection.
+- **`login/`**: Core user authentication and access gateway mechanisms.
+
+Each feature is rigidly separated into an MVC-like layered pattern:
+- `view/`: Contains specific stateful and stateless UI components.
+- `controller/`: Houses the Provider ChangeNotifiers, bridging the gap between business logic, backend calls, and view states.
+- `service/`: Isolated service layers dedicated to managing external API interactions and data fetching.
+- `model/`: Plain Dart Object classes responsible for type-safe structured data mapping from JSON payloads.
 
 ## Networking Strategy
 ### Dynamic Base URL Assignment

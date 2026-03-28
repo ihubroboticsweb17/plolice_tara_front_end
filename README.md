@@ -1,16 +1,22 @@
-# Police Tara
+# Police Tara Frontend
 
-An enterprise-grade Flutter application designed as an intelligent frontend interface for the Police Tara robotics platform. 
+An enterprise-grade Flutter application designed as an intelligent frontend user interface for the **Police Tara robotics platform**. Operating as a dynamic public access terminal, the application is engineered for maximum stability, responsive interactions, and direct integration with active hardware sensors over local networks.
 
-## Overview
-Police Tara provides cutting edge interaction tailored for a landscape-oriented tablet or robot device. It serves as an intuitive portal for language selection, real-time battery and volume monitoring, dynamic API communication, and a robust Complaint Management flow that directly interacts with backend systems.
+## Architecture & Overview
+Police Tara provides cutting-edge interaction tailored strictly for a landscape-oriented tablet embedded within robot hardware. Built around a robust Provider-based MVC architecture, it cleanly separates UI rendering, business logic, model serialization, and external API communication.
 
-## Key Features
-- **Dynamic Networking:** Constantly polls for and manages connection to dynamic Robot APIs over local networks (`192.168.x.x`) and a global IP space.
-- **Glassmorphism UI:** An aesthetic, modern, layout built around beautiful glassy panels using `BaseGlassmorphism` and `ChildGlasmorphism`.
-- **Landscape First Layout:** Locked to landscape mode (`landscapeRight` and `landscapeLeft`) to ensure maximum screen utilization on robotics hardware.
-- **Provider State Management:** Highly decoupled application state for decoupled controller management.
-- **Integrated Complaints Portal:** Real-time logging, editing, and stateful tracking of public complaints.
+The software serves as a multi-functional kiosk portal enabling:
+- Real-time battery and hardware volume monitoring.
+- Dynamic backend network discovery via an actively polling IP system.
+- Secure login and unified localization capabilities.
+- A robust Complaint Management ecosystem communicating directly with unified police datastores.
+
+## Key Technical Features
+- **Dynamic Network Polling:** Constantly pings a global registry (`http://3.88.46.127`) to map and connect to the robot's dynamic local APIs (`192.168.x.x`) ensuring uninterrupted connectivity.
+- **Glassmorphism Design System:** An immersive, aesthetic, modern layout built around beautifully rendered glossy core widgets (`BaseGlassmorphism` and `ChildGlasmorphism`) ensuring a premium user experience on large touchscreens.
+- **Landscape Strict Orientation:** Forced tablet orientation (`landscapeRight` and `landscapeLeft`) guaranteeing pixel-perfect scaling across robotic chassis screens.
+- **Isolated Provider Injectors:** Highly decoupled application state distributing control logic across modular ChangeNotifiers like `LanguageProvider`, `BatteryController`, `VolumeController`, and `ComplaintController`.
+- **Integrated Complaints Portal:** Seamlessly integrated CRUD portal allowing members of the public to file, edit, and track complaints instantly.
 
 ## Getting Started
 
@@ -47,8 +53,8 @@ For deeper technical insights, please explore the `docs/` directory:
 - **[Features (docs/features.md)](docs/features.md):** Granular specifics of our Complaint Portals, Language tools, Battery/Volume systems, and the Welcome Dashboard.
 - **[API Reference (docs/api_endpoints.md)](docs/api_endpoints.md):** The REST endpoints driving the entire application.
 
-## Technologies Used
-* **Flutter & Dart** - Core framework and language
-* **Provider** - Application state management
-* **Google Fonts & Lottie** - UI / UX enhancements
-* **http** - API integrations
+## Enterprise Tech Stack
+- **Framework:** Flutter (`^3.8.1`), Dart SDK
+- **State Management:** Provider pattern utilizing distributed ChangeNotifiers
+- **Networking:** Custom HTTP API Service Layer dynamically mapping endpoint gateways
+- **UI Toolkit:** Custom UI library (Glassmorphic layouts, Google Fonts, Lottie JSON micro-animations)
